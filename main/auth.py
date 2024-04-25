@@ -9,7 +9,7 @@ class roleClassify():
     def roleReturn(self, request):
         debug = settings.DEBUG
         if debug:
-            return "Editor"
+            return "Super Admin"
         role = request.session['role']
         return role
 
@@ -30,7 +30,7 @@ class userAuth(BaseBackend):
         hasher = PBKDF2PasswordHasher()
         try:
             user = UserTable.objects.get(email=email)
-            if hasher.verify(entered_Password, user.user_password):
+            if hasher.verify(entered_Password, user.password):
                 return user
             else:
                 return None

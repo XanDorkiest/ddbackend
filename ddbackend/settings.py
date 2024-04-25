@@ -29,8 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8080/', 'https://localhost:8080']
-CORS_ORIGIN_WHITELIST = ['https://localhost:8080',]
+CSRF_TRUSTED_ORIGINS = ['http://localhost',]
+CORS_ORIGIN_WHITELIST = ['http://localhost',]
 TIME_ZONE = 'Asia/Manila'
 
 
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'main.auth.CorsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -63,7 +64,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ddbackend.urls'
 SESSION_COOKIE_AGE = 10800
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-AUTHENTICATION_BACKENDS = ['userPortal.backends.userAuth', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = ['main.auth.userAuth', 'django.contrib.auth.backends.ModelBackend']
 CORS_ALLOW_HEADERS = ['content-type']
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

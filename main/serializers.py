@@ -46,6 +46,16 @@ class ActionSerializer(serializers.ModelSerializer):
 
 
 #specialz serializers
+
+class changePassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTable
+        fields = ['user_password']
+        
+class UserInsertTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTable
+        fields = ['email','phone_number','first_name','last_name','role','user_password']
 # class specialInventorySerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = InventoryTable

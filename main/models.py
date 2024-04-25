@@ -19,11 +19,11 @@ class UserTable(models.Model):
     phone_number = models.BigIntegerField()
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
-    user_password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
 
     def save(self, *args, **kwargs):
-        if self.user_password:
-            self.user_password = PBKDF2PasswordHasher().encode(self.user_password, PBKDF2PasswordHasher().salt())
+        if self.password:
+            self.password = PBKDF2PasswordHasher().encode(self.password, PBKDF2PasswordHasher().salt())
         super().save(*args, **kwargs)
 
 
