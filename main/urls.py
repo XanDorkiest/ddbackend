@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import updatePass, UsersClass, \
 LoginPoint, LogoutPoint, \
-logoutAllUsers
+logoutAllUsers, OwnAssignedTicketsClass
 
 urlpatterns = [
     path('userChangePassword/', updatePass),
@@ -11,5 +11,7 @@ urlpatterns = [
     path('login/', LoginPoint.as_view()),
     path('logout/', LogoutPoint.as_view()),
     path('logoutAllUsers/', logoutAllUsers),
-    path('changePass/', updatePass)
+    path('changePass/', updatePass),
+
+    path('ownTickets/<str:email>', OwnAssignedTicketsClass.as_view())
 ]

@@ -21,7 +21,7 @@ from .serializers import \
     RoleSerializer, UserSerializer, \
     CategorySerializer, TicketSerializer, \
     AssignmentSerializer, ActionSerializer, \
-    UserInsertTableSerializer, changePassSerializer
+    UserInsertTableSerializer, changePassSerializer, FatAssignSerializer
 from rest_framework import generics, status
 from rest_framework import mixins
 
@@ -32,9 +32,10 @@ class LoginPoint(APIView):
         password = request.data['password']
         user = authenticate(request, email=email, password=password)
         if user is not None:
+            
             request.session['email'] = user.email
             request.session['role'] = user.role.role_name
-            return Response({"message": "Login successful.","role": user.role.role_name}, status.HTTP_200_OK)
+            return Response({"message": "Login successful.","email": user.email,"role": user.role.role_name}, status.HTTP_200_OK)
         else:
             return Response({'error':'Unauthorized'},status=status.HTTP_401_UNAUTHORIZED)
 
@@ -218,3 +219,33 @@ class UsersClass(generics.GenericAPIView, mixins.CreateModelMixin, mixins.Update
         else:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
+class OwnAssignedTicketsClass(generics.GenericAPIView):
+    permission_classes = [sessionCustomAuthentication]
+    serializer_class = FatAssignSerializer
+    queryset = AssignmentTable.objects.all()
+    roleLookup = roleClassify()
+
+    def get(self, request, email=None):
+        email = email
+        print(email)
+        queryset = AssignmentTable.objects.filter(email=email)
+        serializer = AssignmentSerializer(queryset, many=True)
+        response = Response(serializer.data)
+        return response
+        
+
+    def post(self, request):
+        email = None
+        if settings.DEBUG is False:
+            email = request.session['email']
+        else:
+            email = request.data['email']
+        serializer = AssignmentSerializer(self.get_queryset().filter(email=email), many=True)
+        return Response(serializer.data)
+
+    def getRole(self, request):
+        try:
+            lookUpRole = self.roleLookup.roleReturn(request)
+            return lookUpRole
+        except:
+            return ""

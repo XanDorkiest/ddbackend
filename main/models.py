@@ -71,7 +71,7 @@ class TicketTable(models.Model):
         if not self.creation_date:
             today = timezone.now().today()
             today_str = today.strftime('%Y-%m-%d')
-            self.data_of_reservation = today_str
+            self.creation_date = today_str
         super().save(*args, **kwargs)
     
     
@@ -83,8 +83,8 @@ class AssignmentTable(models.Model):
     email = models.ForeignKey('UserTable', on_delete=models.CASCADE, db_column='email')
 
     def __str__(self):
-        stringZ = "{assignmentId}: {ticketId} : {email} : {name}"
-        return stringZ.format(assignmentId=self.assignment_id,ticketId=self.ticket_id.ticket_id, email=self.email.email, name=(self.email.first_name + " " + self.email.last_name))
+        stringZ = "{assignmentId}: {categoryId} : {ticketId} : {ticketSubject} : {ticketDescription} : {ticketStatus} : {date} : {email} : {name} : "
+        return stringZ.format(assignmentId=self.assignment_id, ticketId=self.ticket_id.ticket_id, ticketSubject=self.ticket_id.ticket_subject, ticketDescription=self.ticket_id.ticket_description, ticketStatus=self.ticket_id.status, date=self.ticket_id.creation_date, categoryId=self.ticket_id.category_id, email=self.email.email, name=(self.email.first_name + " " + self.email.last_name))
 
     class Meta:
         managed = False
@@ -97,9 +97,9 @@ class ActionTable(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'ticket_table'
+        db_table = 'action_table'
 
 
     def __str__(self):
         formatString = "{ActionId} : {ticketId} : {email} : {name}"
-        return formatString.format(ActionId=self.assignment_id, item=self.tiket_id.ticket_id, email=self.email.email, name=(self.email.first_name + " " + self.email.last_name))
+        return formatString.format(ActionId=self.assignment_id, item=self.ticket_id.ticket_id, email=self.email.email, name=(self.email.first_name + " " + self.email.last_name))

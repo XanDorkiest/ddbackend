@@ -10,7 +10,7 @@ class roleClassify():
         debug = settings.DEBUG
         if debug:
             return "Super Admin"
-        role = request.session['role']
+        role = request.session['role_id']
         return role
 
 class sessionCustomAuthentication(IsAuthenticated):
@@ -31,6 +31,7 @@ class userAuth(BaseBackend):
         try:
             user = UserTable.objects.get(email=email)
             if hasher.verify(entered_Password, user.password):
+                print(user)
                 return user
             else:
                 return None

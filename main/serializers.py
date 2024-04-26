@@ -10,6 +10,8 @@ from .models import UserTable, \
 class FKeyEmailSerializer (serializers.ModelSerializer):
     class Meta:
         model = UserTable
+        
+        fields = '[email]'
 
 
 #base serializers
@@ -51,93 +53,23 @@ class changePassSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTable
         fields = ['user_password']
-        
+
 class UserInsertTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTable
         fields = ['email','phone_number','first_name','last_name','role','user_password']
-# class specialInventorySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = InventoryTable
-#         fields = '__all__'
-#         depth = 1
 
-# class specialHistorySerializer(serializers.ModelSerializer):
-#     item_code = ReservationHistoryExtSerializer()
-#     email = HistoryReportExtUserTable()
-#     class Meta:
-#         model = HistoryTable
-#         fields = '__all__'
+class FatAssignSerializer(serializers.ModelSerializer):
+    ticket_subject = serializers.CharField(source='ticket_id.ticket_subject')
+    ticket_description = serializers.CharField(source='ticket_id.ticket_description')
+    ticket_status = serializers.CharField(source='ticket_id.status')
+    ticket_creation_date = serializers.DateField(source='ticket_id.creation_date')
+    user_email = serializers.EmailField(source='email.email')
+    user_name = serializers.SerializerMethodField()
 
-# class specialReservationSerializer(serializers.ModelSerializer):
-#     item_code = ReservationHistoryExtSerializer()
-#     class Meta:
-#         model = ReservationTable
-#         fields = '__all__'
+    class Meta:
+        model = AssignmentTable
+        fields = ['assignment_id', 'ticket_id', 'ticket_subject', 'ticket_description', 'ticket_status', 'ticket_creation_date', 'user_email', 'user_name']
 
-# class numberOnlyUserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserTable
-#         fields = ['email','phone_number']
-
-# class itemNameOnlySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = InventoryTable
-#         fields = ['item_name']
-
-# class textPeopleFindSerializer(serializers.ModelSerializer):
-#     email = numberOnlyUserSerializer()
-#     item_code = itemNameOnlySerializer()
-#     class Meta:
-#         model = HistoryTable
-#         fields = ['email', 'item_code','due_date']
-
-# class specialHistoryReportSerializer(serializers.ModelSerializer):
-#     item_code = ReservationHistoryExtSerializer()
-#     email = HistoryReportExtUserTable()
-#     class Meta:
-#         model = HistoryTable
-#         fields = '__all__'
-
-# class multipleItemInsertSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = InventoryTable
-#         fields = ['category','item_name','item_condition','status']
-
-# class multipleItemUpdateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = InventoryTable
-#         fields = ['item_code','category','item_name','item_condition','status']
-
-# class pendingReservationSerializer(serializers.ModelSerializer):
-#     item_code = pendingExtReservation()
-#     class Meta:
-#         model = ReservationTable
-#         fields = ['reservation_id','item_code','date_of_expiration']
-
-# class changePassSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserTable
-#         fields = ['user_password']
-
-# class extspecificUserHistorySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = InventoryTable
-#         fields = ['item_code','item_name']
-
-# class specificUserHistorySerializer(serializers.ModelSerializer):
-#     item_code = extspecificUserHistorySerializer()
-#     class Meta:
-#         model = HistoryTable
-#         fields = ['item_code','date_in','date_out']
-
-# class specificUserReservationSerializer(serializers.ModelSerializer):
-#     item_code = extspecificUserHistorySerializer()
-#     class Meta:
-#         model = ReservationTable
-#         fields = ['reservation_id','item_code','date_of_expiration']
-
-# class UserInsertTableSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserTable
-#         fields = ['email','phone_number','first_name','last_name','role','user_password']
+    def get_user_name(self, obj):
+        return f"{obj.email.first_name} {obj.email.last_name}"
