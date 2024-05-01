@@ -10,7 +10,7 @@ class roleClassify():
         debug = settings.DEBUG
         if debug:
             return "Super Admin"
-        role = request.session['role_id']
+        role = request.session['role_name']
         return role
 
 class sessionCustomAuthentication(IsAuthenticated):

@@ -191,7 +191,7 @@ class UsersClass(generics.GenericAPIView, mixins.CreateModelMixin, mixins.Update
             except:
                 pass
             try:
-                role = RoleTable.objects.get(role_id=request.data['role'])
+                role = RoleTable.objects.get(role_name=request.data['role'])
                 user.role = role
             except:
                 pass

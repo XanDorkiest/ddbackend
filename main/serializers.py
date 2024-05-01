@@ -52,12 +52,12 @@ class ActionSerializer(serializers.ModelSerializer):
 class changePassSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTable
-        fields = ['user_password']
+        fields = ['password']
 
 class UserInsertTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTable
-        fields = ['email','phone_number','first_name','last_name','role','user_password']
+        fields = ['email','phone_number','first_name','last_name','role_name','category_name','password']
 
 class FatAssignSerializer(serializers.ModelSerializer):
     ticket_subject = serializers.CharField(source='ticket_id.ticket_subject')
